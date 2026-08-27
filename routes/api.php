@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\FormController;
+use App\Http\Controllers\SiteSettingController;
 use Illuminate\Support\Facades\Route;
 
 // Matches the frontend's existing fetch() contract exactly ({success, message,
@@ -12,3 +13,7 @@ Route::middleware('throttle:5,10')->group(function () {
     Route::post('/submit-investor', [FormController::class, 'investor']);
     Route::post('/submit-startup', [FormController::class, 'startup']);
 });
+
+// Read-only page content Astro's build fetches at `npm run build` time — see
+// SiteSettingController's own doc comment for why this is safely unauthenticated.
+Route::get('/site-settings/{group}', [SiteSettingController::class, 'show']);

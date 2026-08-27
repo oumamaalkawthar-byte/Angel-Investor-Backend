@@ -30,11 +30,15 @@ class AdminPanelProvider extends PanelProvider
             ->databaseTransactions()
             ->homeUrl('/')
             ->brandName('Angel Investor')
+            ->brandLogo(asset('images/logo.png'))
+            ->darkModeBrandLogo(asset('images/logo-dark.png'))
+            ->brandLogoHeight('2.5rem')
             ->colors([
                 'primary' => Color::hex('#fcbd17'),
             ])
             ->navigationGroups([
                 'Submissions',
+                'Pages',
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
