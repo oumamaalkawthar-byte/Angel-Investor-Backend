@@ -15,9 +15,12 @@ class GoogleSheetsService
     }
 
     /**
-     * Push a row to a tab on the shared spreadsheet. Fire-and-forget: a Sheets
-     * outage never blocks a real submission (already safely in the database)
-     * from succeeding for the visitor.
+     * Push a row to a tab on the shared spreadsheet. $data is associative
+     * (column label => value) — the Apps Script web app on the other end
+     * uses the keys as headers, creating the tab and/or any new columns on
+     * first use. Fire-and-forget: a Sheets outage never blocks a real
+     * submission (already safely in the database) from succeeding for the
+     * visitor.
      */
     public function push(string $tab, array $data): bool
     {

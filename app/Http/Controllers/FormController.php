@@ -42,10 +42,10 @@ class FormController extends Controller
         ]);
 
         app(GoogleSheetsService::class)->push('Contact Forms', [
-            now()->toIso8601String(),
-            $validated['name'],
-            $validated['email'],
-            $validated['message'],
+            'Submitted At' => now()->toIso8601String(),
+            'Name'         => $validated['name'],
+            'Email'        => $validated['email'],
+            'Message'      => $validated['message'],
         ]);
 
         $this->dispatchMails(
@@ -106,19 +106,19 @@ class FormController extends Controller
         $application->update(['reference' => $reference]);
 
         app(GoogleSheetsService::class)->push('Join As Investor', [
-            now()->toIso8601String(),
-            $reference,
-            $validated['investor_name'],
-            $validated['investor_email'],
-            $validated['investor_phone'],
-            $validated['investor_city'],
-            $validated['investor_org'] ?? '',
-            $validated['investor_linkedin'] ?? '',
-            $validated['sectors_of_interest'],
-            $validated['ticket_size'],
-            $validated['preferred_stage'],
-            $validated['experience'],
-            $validated['value_add'] ?? '',
+            'Submitted At'         => now()->toIso8601String(),
+            'Reference'            => $reference,
+            'Name'                 => $validated['investor_name'],
+            'Email'                => $validated['investor_email'],
+            'Phone'                => $validated['investor_phone'],
+            'City'                 => $validated['investor_city'],
+            'Organization'         => $validated['investor_org'] ?? '',
+            'LinkedIn'             => $validated['investor_linkedin'] ?? '',
+            'Sectors of Interest'  => $validated['sectors_of_interest'],
+            'Ticket Size'          => $validated['ticket_size'],
+            'Preferred Stage'      => $validated['preferred_stage'],
+            'Experience'           => $validated['experience'],
+            'Value Add'            => $validated['value_add'] ?? '',
         ]);
 
         $this->dispatchMails(
@@ -236,26 +236,26 @@ class FormController extends Controller
         $cofoundersSummary = $application->cofoundersSummary();
 
         app(GoogleSheetsService::class)->push('Apply As Startup', [
-            now()->toIso8601String(),
-            $reference,
-            $validated['founder_name'],
-            $validated['founder_email'],
-            $validated['founder_phone'],
-            $validated['founder_city'],
-            $validated['founder_linkedin'] ?? '',
-            $cofoundersSummary,
-            $validated['startup_name'],
-            $validated['startup_website'] ?? '',
-            $validated['one_liner'],
-            $validated['sector'],
-            $validated['stage'],
-            $validated['registration_status'],
-            $validated['team_size'] ?? '',
-            $validated['investment_ask'],
-            $validated['equity_offered'],
-            $validated['use_of_funds'],
-            $validated['traction'] ?? '',
-            $pitchDeckOriginalName,
+            'Submitted At'        => now()->toIso8601String(),
+            'Reference'           => $reference,
+            'Founder Name'        => $validated['founder_name'],
+            'Founder Email'       => $validated['founder_email'],
+            'Founder Phone'       => $validated['founder_phone'],
+            'Founder City'        => $validated['founder_city'],
+            'Founder LinkedIn'    => $validated['founder_linkedin'] ?? '',
+            'Co-founders'         => $cofoundersSummary,
+            'Startup Name'        => $validated['startup_name'],
+            'Startup Website'     => $validated['startup_website'] ?? '',
+            'One-liner'           => $validated['one_liner'],
+            'Sector'              => $validated['sector'],
+            'Stage'               => $validated['stage'],
+            'Registration Status' => $validated['registration_status'],
+            'Team Size'           => $validated['team_size'] ?? '',
+            'Investment Ask'      => $validated['investment_ask'],
+            'Equity Offered'      => $validated['equity_offered'],
+            'Use of Funds'        => $validated['use_of_funds'],
+            'Traction'            => $validated['traction'] ?? '',
+            'Pitch Deck File'     => $pitchDeckOriginalName,
         ]);
 
         $this->dispatchMails(
