@@ -30,7 +30,7 @@ function doPost(e) {
     var tabName = body.tab;
     var data = body.data || {};
 
-    var ss = SpreadsheetApp.openById('1CwgR8Rah0t7EKkQ4RVoI2CoUFht6YgdwkEcRVg1fVag');
+    var ss = SpreadsheetApp.openById('1odk5frybbLODyGjNFtNrq-8om1bfg6AjkC3KJkfm_5s');
     var sheet = ss.getSheetByName(tabName);
     if (!sheet) {
       sheet = ss.insertSheet(tabName);
