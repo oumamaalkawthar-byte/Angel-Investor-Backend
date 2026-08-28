@@ -9,10 +9,19 @@ class SiteSettingController extends Controller
 {
     /**
      * FileUpload fields (Filament) store a path relative to their disk, not a
-     * full URL — resolve the ones Astro needs to embed directly in a <meta>
-     * tag so it doesn't need its own copy of this list.
+     * full URL — resolve every one of them (images and the hero video alike)
+     * to a full URL here so Astro can use the value directly, without
+     * needing its own copy of this list.
      */
-    private const IMAGE_KEYS = ['seo_og_image'];
+    private const UPLOAD_KEYS = [
+        'seo_og_image',
+        'hero_video',
+        'hero_poster',
+        'banner_1_image',
+        'banner_2_image',
+        'banner_3_image',
+        'banner_4_image',
+    ];
 
     /**
      * Public, read-only, unauthenticated by design — this is the same content
@@ -24,7 +33,7 @@ class SiteSettingController extends Controller
     {
         $values = SiteSetting::group($group);
 
-        foreach (self::IMAGE_KEYS as $key) {
+        foreach (self::UPLOAD_KEYS as $key) {
             if (!empty($values[$key])) {
                 $values[$key] = Storage::disk('public')->url($values[$key]);
             }

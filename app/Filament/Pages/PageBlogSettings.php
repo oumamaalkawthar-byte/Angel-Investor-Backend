@@ -50,7 +50,8 @@ class PageBlogSettings extends Page
                         ->rows(2)
                         ->placeholder('Explore the thinking that helps founders prepare well and investors evaluate with greater clarity.')
                         ->columnSpanFull(),
-                ]),
+                    Components\TextInput::make('cta_button_text')->label('Button text')->placeholder('Watch founder pitches'),
+                ])->columns(2),
         ])->statePath('data');
     }
 

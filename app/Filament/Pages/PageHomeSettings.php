@@ -54,6 +54,24 @@ class PageHomeSettings extends Page
                         ->placeholder('Apply as startup'),
                 ])->columns(2),
 
+            Components\Section::make('Hero Background Video')
+                ->description('The full-bleed video behind the hero text. Leave blank to keep the current one.')
+                ->schema([
+                    Components\FileUpload::make('hero_video')
+                        ->label('Background video (MP4)')
+                        ->disk('public')
+                        ->directory('page-media')
+                        ->acceptedFileTypes(['video/mp4'])
+                        ->maxSize(51200)
+                        ->helperText('MP4, max 50MB. Keep it short and compressed — this autoplays on every visit.'),
+                    Components\FileUpload::make('hero_poster')
+                        ->label('Poster image (shown while video loads)')
+                        ->image()
+                        ->disk('public')
+                        ->directory('page-media')
+                        ->maxSize(3072),
+                ])->columns(2),
+
             Components\Section::make('Hero — Capital Deployed Stat')
                 ->description('The stat shown in the bottom-right corner of the hero video.')
                 ->schema([
@@ -80,6 +98,8 @@ class PageHomeSettings extends Page
                 ->schema([
                     Components\TextInput::make('cta_eyebrow')->label('Small label')->placeholder('Start the conversation'),
                     Components\Textarea::make('cta_description')->label('Description')->rows(2)->columnSpanFull(),
+                    Components\TextInput::make('cta_button_primary')->label('Primary button text')->placeholder('Submit your pitch'),
+                    Components\TextInput::make('cta_button_secondary')->label('Secondary button text')->placeholder('Join as investor'),
                 ])->columns(2),
         ])->statePath('data');
     }

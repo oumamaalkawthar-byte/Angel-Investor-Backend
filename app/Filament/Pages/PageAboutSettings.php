@@ -41,6 +41,19 @@ class PageAboutSettings extends Page
                         ->columnSpanFull(),
                 ]),
 
+            Components\Section::make('Hero Banner Slider')
+                ->description('The 4-image slideshow behind the hero text. Leave any image blank to keep the current one.')
+                ->schema([
+                    Components\FileUpload::make('banner_1_image')->label('Image 1')->image()->disk('public')->directory('page-media')->maxSize(3072),
+                    Components\TextInput::make('banner_1_caption')->label('Caption 1')->placeholder('Investor dialogue'),
+                    Components\FileUpload::make('banner_2_image')->label('Image 2')->image()->disk('public')->directory('page-media')->maxSize(3072),
+                    Components\TextInput::make('banner_2_caption')->label('Caption 2')->placeholder('Founder pitches'),
+                    Components\FileUpload::make('banner_3_image')->label('Image 3')->image()->disk('public')->directory('page-media')->maxSize(3072),
+                    Components\TextInput::make('banner_3_caption')->label('Caption 3')->placeholder('Ideas in focus'),
+                    Components\FileUpload::make('banner_4_image')->label('Image 4')->image()->disk('public')->directory('page-media')->maxSize(3072),
+                    Components\TextInput::make('banner_4_caption')->label('Caption 4')->placeholder('Commitments made'),
+                ])->columns(2),
+
             Components\Section::make('Our Purpose')
                 ->description('The paragraph under the "Capital should move more than a company forward..." heading.')
                 ->schema([
@@ -75,7 +88,9 @@ class PageAboutSettings extends Page
                         ->rows(2)
                         ->placeholder('Whether you are building a responsible venture or looking for purposeful deal flow, the next conversation starts here.')
                         ->columnSpanFull(),
-                ]),
+                    Components\TextInput::make('cta_button_primary')->label('Primary button text')->placeholder('Apply as startup'),
+                    Components\TextInput::make('cta_button_secondary')->label('Secondary button text')->placeholder('Apply as investor'),
+                ])->columns(2),
         ])->statePath('data');
     }
 
