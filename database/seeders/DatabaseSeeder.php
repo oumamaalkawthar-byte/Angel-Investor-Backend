@@ -13,9 +13,9 @@ class DatabaseSeeder extends Seeder
     /**
      * Seed the application's database.
      *
-     * There's no Filament UserResource in this app (single-admin backend,
-     * no multi-role management needed) — this seeder is the only way to get
-     * a first login. Change this password immediately after logging in once
+     * This seeder is only the first login — once in, use the Admin Users
+     * page (Settings) to create real accounts and retire this placeholder
+     * one. Change this password immediately after logging in once
      * (Filament's passwordReset() is enabled on the panel).
      *
      * Deliberately not using User::factory() here — UserFactory relies on
