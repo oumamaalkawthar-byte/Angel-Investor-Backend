@@ -113,6 +113,9 @@ return [
     'notification' => [
         'address' => env('MAIL_TO_ADDRESS', env('MAIL_FROM_ADDRESS', 'hello@example.com')),
         'name' => env('MAIL_TO_NAME', env('MAIL_FROM_NAME', env('APP_NAME', 'Angel Investor'))),
+        // Optional extra recipient CC'd on every admin notification (all 3 forms),
+        // alongside the primary address above. Leave unset to CC nobody.
+        'cc' => env('MAIL_NOTIFICATION_CC'),
     ],
 
 ];

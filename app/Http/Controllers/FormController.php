@@ -306,8 +306,13 @@ class FormController extends Controller
             $adminMail->attachFile($attachmentPath, $attachmentName);
         }
         $adminRecipient = config('mail.notification.address');
-        app()->terminating(function () use ($adminMail, $adminRecipient) {
-            Mail::to($adminRecipient)->send($adminMail);
+        $adminCc = config('mail.notification.cc');
+        app()->terminating(function () use ($adminMail, $adminRecipient, $adminCc) {
+            $mail = Mail::to($adminRecipient);
+            if ($adminCc) {
+                $mail->cc($adminCc);
+            }
+            $mail->send($adminMail);
         });
 
         $thankYouMail = new SiteMail(
