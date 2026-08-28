@@ -266,7 +266,7 @@ class FormController extends Controller
                 ['label' => 'LinkedIn', 'value' => $validated['founder_linkedin'] ?? '-'],
                 ['label' => 'Bio', 'value' => $validated['founder_bio']],
                 ['label' => 'Co-founders', 'value' => $cofoundersSummary],
-                ['label' => 'Startup', 'value' => "{$validated['startup_name']} ({$validated['startup_website']})"],
+                ['label' => 'Startup', 'value' => "{$validated['startup_name']} ({$validated['startup_website'] ?? '-'})"],
                 ['label' => 'One-liner', 'value' => $validated['one_liner']],
                 ['label' => 'Sector / Stage / Registration', 'value' => "{$validated['sector']} | {$validated['stage']} | {$validated['registration_status']}"],
                 ['label' => 'Team Size', 'value' => $validated['team_size'] ?? '-'],
