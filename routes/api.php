@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\FormController;
+use App\Http\Controllers\RedirectController;
 use App\Http\Controllers\SiteSettingController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +18,6 @@ Route::middleware('throttle:5,10')->group(function () {
 // Read-only page content Astro's build fetches at `npm run build` time — see
 // SiteSettingController's own doc comment for why this is safely unauthenticated.
 Route::get('/site-settings/{group}', [SiteSettingController::class, 'show']);
+
+// Same build-time-only contract as site-settings — see RedirectController.
+Route::get('/redirects', [RedirectController::class, 'index']);
