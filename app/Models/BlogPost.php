@@ -12,6 +12,7 @@ class BlogPost extends Model
     protected $casts = [
         'pub_date' => 'datetime',
         'faqs' => 'array',
+        'body_image_alts' => 'array',
         'nofollow_external_links' => 'boolean',
     ];
 
@@ -46,5 +47,24 @@ class BlogPost extends Model
     public function scopePublished($query)
     {
         return $query->where('status', 'published')->where('pub_date', '<=', now());
+    }
+
+    /**
+     * Filenames of every <img> currently inserted in a body HTML string (via
+     * the rich-text editor's file attachments) - shown back to the editor as
+     * a checklist so they know which images still need an alt-text entry in
+     * the Body Images repeater, without having to dig through the editor or
+     * an external file list themselves. Static so it can be called against
+     * the form's live in-progress state, not just a saved model.
+     */
+    public static function extractBodyImageFilenames(?string $bodyHtml): array
+    {
+        preg_match_all('/<img[^>]+src="([^"]+)"/i', (string) $bodyHtml, $matches);
+
+        return collect($matches[1] ?? [])
+            ->map(fn (string $src) => basename(parse_url($src, PHP_URL_PATH) ?: $src))
+            ->unique()
+            ->values()
+            ->all();
     }
 }

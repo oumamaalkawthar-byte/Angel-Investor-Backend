@@ -116,6 +116,7 @@ class BlogPostResource extends Resource
                 ->schema([
                     Forms\Components\RichEditor::make('body')
                         ->required()
+                        ->live(onBlur: true)
                         ->fileAttachmentsDisk('public')
                         ->fileAttachmentsDirectory('blog-inline')
                         ->extraAttributes(['class' => 'sticky-toolbar-editor'])
@@ -141,6 +142,34 @@ class BlogPostResource extends Resource
                         ->helperText('Shown as an embedded player right after the article body.')
                         ->columnSpanFull(),
                 ]),
+
+            Forms\Components\Section::make('Body Images — Alt Text')
+                ->description('The rich-text toolbar\'s image button doesn\'t ask for alt text directly, so add it here instead: match each image below by its filename (shown as a hint after you insert it) and describe it. Any image left unlisted just won\'t have alt text.')
+                ->schema([
+                    Forms\Components\Placeholder::make('detected_images_hint')
+                        ->label('Images currently in the body')
+                        ->content(function (Forms\Get $get) {
+                            $filenames = BlogPost::extractBodyImageFilenames($get('body'));
+                            return $filenames === []
+                                ? 'No images detected in the body yet.'
+                                : implode(', ', $filenames);
+                        }),
+                    Forms\Components\Repeater::make('body_image_alts')
+                        ->label('')
+                        ->schema([
+                            Forms\Components\TextInput::make('filename')
+                                ->label('Image filename')
+                                ->required()
+                                ->helperText('Copy exactly from the list above.'),
+                            Forms\Components\TextInput::make('alt')
+                                ->label('Alt text')
+                                ->required(),
+                        ])
+                        ->columns(2)
+                        ->addActionLabel('Add an image\'s alt text')
+                        ->defaultItems(0),
+                ])
+                ->collapsed(fn (Forms\Get $get) => blank($get('body_image_alts'))),
 
             Forms\Components\Section::make('FAQ Accordion')
                 ->description('Add question/answer pairs to render an expandable FAQ accordion at the end of the article, with Google-eligible FAQ structured data automatically attached.')
