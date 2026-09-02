@@ -24,21 +24,27 @@ class BlogPostController extends Controller
             'readTime' => $post->read_time,
             'art' => $post->art,
             'image' => $post->image ? Storage::disk('public')->url($post->image) : null,
+            'imageAlt' => $post->image_alt,
             'videoUrl' => $post->video_url,
             'body' => $post->body,
+            'faqs' => $post->faqs ?? [],
+            'seoTitle' => $post->seo_title,
+            'metaDescription' => $post->meta_description,
+            'canonicalUrl' => $post->canonical_url,
+            'nofollowExternalLinks' => $post->nofollow_external_links,
         ];
     }
 
     public function index()
     {
         return response()->json(
-            BlogPost::orderByDesc('pub_date')->get()->map(fn (BlogPost $p) => $this->transform($p))->values()
+            BlogPost::published()->orderByDesc('pub_date')->get()->map(fn (BlogPost $p) => $this->transform($p))->values()
         );
     }
 
     public function show(string $slug)
     {
-        $post = BlogPost::where('slug', $slug)->first();
+        $post = BlogPost::published()->where('slug', $slug)->first();
 
         if (!$post) {
             return response()->json(['message' => 'Not found'], 404);
