@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BlogPostController;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\RedirectController;
 use App\Http\Controllers\SiteSettingController;
@@ -21,3 +22,8 @@ Route::get('/site-settings/{group}', [SiteSettingController::class, 'show']);
 
 // Same build-time-only contract as site-settings — see RedirectController.
 Route::get('/redirects', [RedirectController::class, 'index']);
+
+// Same build-time-only contract as site-settings — see BlogPostController.
+// Replaces the old Sanity-hosted blog content.
+Route::get('/blog-posts', [BlogPostController::class, 'index']);
+Route::get('/blog-posts/{slug}', [BlogPostController::class, 'show']);
