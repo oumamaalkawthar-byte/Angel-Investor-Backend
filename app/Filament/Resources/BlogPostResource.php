@@ -9,6 +9,8 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use FilamentTiptapEditor\Enums\TiptapOutput;
+use FilamentTiptapEditor\TiptapEditor;
 use Illuminate\Support\Str;
 
 class BlogPostResource extends Resource
@@ -114,18 +116,18 @@ class BlogPostResource extends Resource
 
             Forms\Components\Section::make('Body')
                 ->schema([
-                    Forms\Components\RichEditor::make('body')
+                    TiptapEditor::make('body')
+                        ->tools([
+                            'heading', 'bold', 'italic', 'underline', 'strike',
+                            'bullet-list', 'ordered-list', 'blockquote', 'link',
+                            'table', 'media', 'hr', 'redo', 'undo',
+                        ])
+                        ->output(TiptapOutput::Html)
+                        ->disk('public')
+                        ->directory('blog-inline')
+                        ->extraAttributes(['class' => 'sticky-toolbar-editor'])
                         ->required()
                         ->live(onBlur: true)
-                        ->fileAttachmentsDisk('public')
-                        ->fileAttachmentsDirectory('blog-inline')
-                        ->extraAttributes(['class' => 'sticky-toolbar-editor'])
-                        ->toolbarButtons([
-                            'bold', 'italic', 'underline', 'strike', 'link',
-                            'h2', 'h3', 'h4', 'h5', 'h6',
-                            'bulletList', 'orderedList', 'blockquote',
-                            'table', 'attachFiles', 'undo', 'redo',
-                        ])
                         ->helperText('Headings H2–H6, tables, and inline images are all available in the toolbar. For the FAQ accordion, use the dedicated FAQs section below instead of writing questions directly in the body.')
                         ->rule(function (Forms\Get $get) {
                             return function (string $attribute, $value, \Closure $fail) use ($get) {

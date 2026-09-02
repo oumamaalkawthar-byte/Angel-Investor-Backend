@@ -3,6 +3,7 @@
      its timer when the current URL is actually a blog post edit page. --}}
 <style>
     .sticky-toolbar-editor .fi-fo-rich-editor-toolbar,
+    .sticky-toolbar-editor .tiptap-toolbar,
     div[x-data*="richEditorFormComponent"] .ProseMirror-menubar,
     .sticky-toolbar-editor > div > div:first-child {
         position: sticky;
