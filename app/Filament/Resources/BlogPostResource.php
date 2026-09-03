@@ -131,7 +131,7 @@ class BlogPostResource extends Resource
                         ->helperText('Headings H2–H6, tables, and inline images are all available in the toolbar. For the FAQ accordion, use the dedicated FAQs section below instead of writing questions directly in the body.')
                         ->rule(function (Forms\Get $get) {
                             return function (string $attribute, $value, \Closure $fail) use ($get) {
-                                if ($get('status') === 'published' && stripos((string) $value, '<h2') === false) {
+                                if ($get('status') === 'published' && !BlogPost::bodyHasHeadingLevel($value, 2)) {
                                     $fail('A published post should have at least one H2 heading for good structure and SEO.');
                                 }
                             };

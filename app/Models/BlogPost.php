@@ -43,6 +43,34 @@ class BlogPost extends Model
         });
     }
 
+    /** True if the body (HTML string or Tiptap's live JSON form-state) contains an H{$level} heading. */
+    public static function bodyHasHeadingLevel(mixed $body, int $level): bool
+    {
+        if (is_string($body)) {
+            return stripos($body, "<h{$level}") !== false;
+        }
+
+        if (is_array($body)) {
+            $found = false;
+            $walk = function ($node) use (&$found, &$walk, $level) {
+                if (!is_array($node) || $found) {
+                    return;
+                }
+                if (($node['type'] ?? null) === 'heading' && ($node['attrs']['level'] ?? null) === $level) {
+                    $found = true;
+                    return;
+                }
+                foreach ($node['content'] ?? [] as $child) {
+                    $walk($child);
+                }
+            };
+            $walk($body);
+            return $found;
+        }
+
+        return false;
+    }
+
     /** Published AND its publish date/time has actually arrived - lets "Published" + a future date act as scheduling. */
     public function scopePublished($query)
     {
@@ -57,11 +85,34 @@ class BlogPost extends Model
      * an external file list themselves. Static so it can be called against
      * the form's live in-progress state, not just a saved model.
      */
-    public static function extractBodyImageFilenames(?string $bodyHtml): array
+    public static function extractBodyImageFilenames(mixed $body): array
     {
-        preg_match_all('/<img[^>]+src="([^"]+)"/i', (string) $bodyHtml, $matches);
+        // TiptapEditor's *live* in-form state is a Tiptap JSON document (an
+        // array of nested nodes), not the plain HTML string it's actually
+        // saved as - so both shapes need to be handled here. Recursing the
+        // JSON tree for image nodes' `src` attrs covers the live-editing
+        // case; the regex covers the saved/HTML case.
+        $srcs = [];
 
-        return collect($matches[1] ?? [])
+        if (is_array($body)) {
+            $walk = function ($node) use (&$srcs, &$walk) {
+                if (!is_array($node)) {
+                    return;
+                }
+                if (($node['type'] ?? null) === 'image' && !empty($node['attrs']['src'])) {
+                    $srcs[] = $node['attrs']['src'];
+                }
+                foreach ($node['content'] ?? [] as $child) {
+                    $walk($child);
+                }
+            };
+            $walk($body);
+        } elseif (is_string($body)) {
+            preg_match_all('/<img[^>]+src="([^"]+)"/i', $body, $matches);
+            $srcs = $matches[1] ?? [];
+        }
+
+        return collect($srcs)
             ->map(fn (string $src) => basename(parse_url($src, PHP_URL_PATH) ?: $src))
             ->unique()
             ->values()
