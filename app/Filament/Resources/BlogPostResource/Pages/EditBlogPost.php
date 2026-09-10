@@ -43,11 +43,18 @@ class EditBlogPost extends EditRecord
     #[On('autosave-tick')]
     public function autosave(): void
     {
-        // Persist whatever's currently in the form as-is, including an
-        // in-progress "Draft" status — a background save, not a real
-        // Save-button click, so it deliberately skips validation (an
-        // incomplete draft shouldn't block itself from being saved).
-        $this->record->fill($this->form->getRawState())->save();
+        // getRawState() includes every form component's value, including
+        // UI-only ones with no real column (e.g. the "detected images" hint
+        // Placeholder in the Body Images section) — unlike Filament's normal
+        // save flow, it doesn't filter those out (that filtering happens via
+        // validation/dehydration, which this deliberately skips so an
+        // incomplete draft can't fail to autosave on itself). Restricting to
+        // the model's actual columns avoids a "column not found" SQL error
+        // on every tick.
+        $columns = $this->record->getConnection()->getSchemaBuilder()->getColumnListing($this->record->getTable());
+        $state = array_intersect_key($this->form->getRawState(), array_flip($columns));
+
+        $this->record->fill($state)->save();
         $this->dispatch('autosaved-at', time: now()->format('g:i:s A'));
     }
 }

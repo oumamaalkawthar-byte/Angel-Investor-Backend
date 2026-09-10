@@ -33,7 +33,14 @@ return [
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app/private'),
-            'serve' => true,
+            // Left off deliberately: when true, Laravel auto-registers its own
+            // GET|HEAD storage/{path} route (storage.local), which shares the
+            // exact same method+URI key as this project's own custom
+            // /storage/{path} route below in routes/web.php — Laravel's route
+            // table is keyed by method+URI, so whichever gets registered last
+            // silently overwrites the other, and the framework's version 404s
+            // here since it doesn't match how images are actually requested.
+            'serve' => false,
             'throw' => false,
             'report' => false,
         ],
